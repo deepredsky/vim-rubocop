@@ -58,3 +58,6 @@ function! s:executeCmd(cmd)
   let g:backgroundCommandOutput = tempname()
   call job_start(a:cmd, {'close_cb': 'BackgroundCmdFinish', 'out_io': 'file', 'out_name': g:backgroundCommandOutput})
 endfunction
+
+command! -nargs=0 RuboCop call RuboCop()
+command! -nargs=0 RuboCopAll call RuboCopAll()
