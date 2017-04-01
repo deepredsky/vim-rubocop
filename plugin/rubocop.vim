@@ -1,5 +1,9 @@
 function! Rubocop()
-  call s:RunRubocop(@%)
+  if &filetype == "ruby"
+    call s:RunRubocop(@%)
+  else
+    echo "Cannot run rubocop on non-ruby file"
+  endif
 endfunction
 
 function! RubocopAll()
