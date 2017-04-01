@@ -1,20 +1,20 @@
-function! Rubocop()
+function! RuboCop()
   if &filetype == "ruby"
-    call s:RunRubocop(@%)
+    call s:RunRuboCop(@%)
   else
     echo "Cannot run rubocop on non-ruby file"
   endif
 endfunction
 
-function! RubocopAll()
-  call s:RunRubocop("")
+function! RuboCopAll()
+  call s:RunRuboCop("")
 endfunction
 
-function! s:RunRubocop(path)
+function! s:RunRuboCop(path)
   if empty(a:path)
-    let s:rubocop_command = s:RubocopCmd()
+    let s:rubocop_command = s:RuboCopCmd()
   else
-    let s:rubocop_command = s:RubocopCmd(). " " . a:path
+    let s:rubocop_command = s:RuboCopCmd(). " " . a:path
   endif
 
   " echom s:rubocop_command
@@ -30,7 +30,7 @@ function! s:RunRubocop(path)
   endif
 endfunction
 
-function! s:RubocopCmd()
+function! s:RuboCopCmd()
   let l:rubocop_command = 'rubocop --format emacs'
   let l:root = getcwd()
   let l:gemfile_path = root . "/Gemfile"
