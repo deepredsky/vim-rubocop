@@ -17,17 +17,7 @@ function! s:RunRuboCop(path)
     let s:rubocop_command = s:RuboCopCmd(). " " . a:path
   endif
 
-  " echom s:rubocop_command
-  let l:results = system(s:rubocop_command)
-
-  let l:rubocop_results = split(l:results, "\n")
-
-  if !empty(l:rubocop_results)
-    cexpr l:rubocop_results
-    copen
-  else
-    echom "No errors! bravo!"
-  endif
+  call s:executeCmd(s:rubocop_command)
 endfunction
 
 function! s:RuboCopCmd()
@@ -45,4 +35,26 @@ function! s:RuboCopCmd()
   endif
 
   return l:rubocop_command
+endfunction
+
+function! BackgroundCmdFinish(channel)
+  execute "cfile! " . g:backgroundCommandOutput
+
+  let l:match_count = len(getqflist())
+
+  if l:match_count
+    copen
+  else
+    cclose
+    echom "No errors! bravo!"
+  endif
+
+  unlet g:backgroundCommandOutput
+endfunction
+
+function! s:executeCmd(cmd)
+  echom "Running Rubocop"
+
+  let g:backgroundCommandOutput = tempname()
+  call job_start(a:cmd, {'close_cb': 'BackgroundCmdFinish', 'out_io': 'file', 'out_name': g:backgroundCommandOutput})
 endfunction
