@@ -5,8 +5,8 @@ VIM plugin to run [RuboCop](https://github.com/bbatsov/rubocop) and displays the
 ## Usage
 
 ```
-:call RuboCop " Runs rubocop on the current buffer
-:call RuboCopAll " Runs rubocop on the whole project
+:RuboCop " Runs rubocop on the current buffer
+:RuboCopAll " Runs rubocop on the whole project
 ```
 
 ## TODO
