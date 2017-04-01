@@ -37,7 +37,7 @@ function! s:RuboCopCmd()
   if filereadable(l:gemfile_path)
     let l:body = join(readfile(l:gemfile_path), "\n")
     let l:bundle_path = matchstr(l:body, "rubocop")
-    if !empty(l:bundle_path)
+    if empty(l:bundle_path)
       let l:rubocop_command = 'rubocop --format emacs'
     else
       let l:rubocop_command = 'bundle exec rubocop --format emacs'
