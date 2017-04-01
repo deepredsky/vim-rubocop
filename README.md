@@ -14,4 +14,5 @@ VIM plugin to run [RuboCop](https://github.com/bbatsov/rubocop) and displays the
 - [x] Run rubocop on whole project
 - [x] Handle bundled rubcop
 - [ ] Pass custom args to rubocop
-- [ ] Run rubocop async
+- [x] Run rubocop async
+- [ ] Support for vim < 8
