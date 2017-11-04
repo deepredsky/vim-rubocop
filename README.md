@@ -9,6 +9,16 @@ VIM plugin to run [RuboCop](https://github.com/bbatsov/rubocop) and displays the
 :RuboCopAll " Runs rubocop on the whole project
 ```
 
+By default it will look at Gemfile and use `bundle exec rubocop --format emacs`
+if rubocop is specified in the Gemfile, otherwise it will fallback to using
+`rubocop --format emacs`. This can be overridden
+
+```
+let g:rubocop_cmd = "bundle exec rubocop --rails --display-cop-names"
+```
+
+NOTE that emacs formatter is required for this plugin to populate quickfix list
+
 ## TODO
 
 - [x] Run rubocop on whole project
