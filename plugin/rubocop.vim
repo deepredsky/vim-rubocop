@@ -1,23 +1,25 @@
-function! RuboCop()
+function! RuboCop(args)
   if &filetype == "ruby"
-    call s:RunRuboCop(@%)
+    call s:RunRuboCop(@%, a:args)
   else
     echo "Cannot run rubocop on non-ruby file"
   endif
 endfunction
 
-function! RuboCopAll()
-  call s:RunRuboCop("")
+function! RuboCopAll(args)
+  call s:RunRuboCop("", a:args)
 endfunction
 
-function! s:RunRuboCop(path)
-  if empty(a:path)
-    let s:rubocop_command = s:RuboCopCmd()
-  else
-    let s:rubocop_command = s:RuboCopCmd(). " " . a:path
+function! s:RunRuboCop(path, args)
+  let l:rubocop_args = a:args . join(a:000, " ")
+
+  if !empty(a:path)
+    let l:rubocop_args = l:rubocop_args . " " . a:path
   endif
 
-  call s:executeCmd(s:rubocop_command)
+  let l:rubocop_command = s:RuboCopCmd(). " " . l:rubocop_args
+
+  call s:executeCmd(l:rubocop_command)
 endfunction
 
 function! s:RuboCopCmd()
@@ -61,12 +63,12 @@ function! BackgroundCmdFinish(channel)
 endfunction
 
 function! s:executeCmd(cmd)
-  echom a:cmd
   echom "Running Rubocop"
 
   let g:backgroundCommandOutput = tempname()
   call job_start(a:cmd, {'close_cb': 'BackgroundCmdFinish', 'out_io': 'file', 'out_name': g:backgroundCommandOutput})
 endfunction
 
-command! -nargs=0 RuboCop call RuboCop()
-command! -nargs=0 RuboCopAll call RuboCopAll()
+command! -nargs=* RuboCop call RuboCop(<q-args>)
+command! -nargs=* Rubocop call RuboCop(<q-args>)
+command! -nargs=* RuboCopAll call RuboCopAll(<q-args>)
