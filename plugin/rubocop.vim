@@ -21,16 +21,24 @@ function! s:RunRuboCop(path)
 endfunction
 
 function! s:RuboCopCmd()
-  let l:rubocop_command = 'rubocop --format emacs'
-  let l:root = getcwd()
-  let l:gemfile_path = root . "/Gemfile"
-  if filereadable(l:gemfile_path)
-    let l:body = join(readfile(l:gemfile_path), "\n")
-    let l:bundle_path = matchstr(l:body, "rubocop")
-    if empty(l:bundle_path)
-      let l:rubocop_command = 'rubocop --format emacs'
+  if exists('g:rubocop_cmd')
+    if g:rubocop_cmd =~ "emacs"
+      let l:rubocop_command = g:rubocop_cmd
     else
-      let l:rubocop_command = 'bundle exec rubocop --format emacs'
+      let l:rubocop_command = g:rubocop_cmd . " --format emacs"
+    endif
+  else
+    let l:rubocop_command = 'rubocop --format emacs'
+    let l:root = getcwd()
+    let l:gemfile_path = root . "/Gemfile"
+    if filereadable(l:gemfile_path)
+      let l:body = join(readfile(l:gemfile_path), "\n")
+      let l:bundle_path = matchstr(l:body, "rubocop")
+      if empty(l:bundle_path)
+        let l:rubocop_command = 'rubocop --format emacs'
+      else
+        let l:rubocop_command = 'bundle exec rubocop --format emacs'
+      endif
     endif
   endif
 
@@ -53,6 +61,7 @@ function! BackgroundCmdFinish(channel)
 endfunction
 
 function! s:executeCmd(cmd)
+  echom a:cmd
   echom "Running Rubocop"
 
   let g:backgroundCommandOutput = tempname()
