@@ -26,4 +26,4 @@ NOTE that emacs formatter is required for this plugin to populate quickfix list
 - [x] Handle bundled rubcop
 - [x] Pass custom args to rubocop
 - [x] Run rubocop async
-- [ ] Support for vim < 8
+- [ ] Support for vim < 8 ( given up on this, sorry :( )
