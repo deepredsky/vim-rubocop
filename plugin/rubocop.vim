@@ -1,16 +1,20 @@
 function! RuboCop(args)
   if &filetype == "ruby"
-    call s:RunRuboCop(@%, a:args)
+    call s:RunRuboCop(@%, 1, a:args)
+  else
+    echo "Cannot run rubocop on non-ruby file"
+  endif
+endfunction
   else
     echo "Cannot run rubocop on non-ruby file"
   endif
 endfunction
 
 function! RuboCopAll(args)
-  call s:RunRuboCop("", a:args)
+  call s:RunRuboCop("", 1, a:args)
 endfunction
 
-function! s:RunRuboCop(path, args)
+function! s:RunRuboCop(path, async, args)
   let l:rubocop_args = a:args . join(a:000, " ")
 
   if !empty(a:path)
@@ -19,7 +23,11 @@ function! s:RunRuboCop(path, args)
 
   let l:rubocop_command = s:RuboCopCmd(). " " . l:rubocop_args
 
-  call s:executeCmd(l:rubocop_command)
+  if a:async
+    call s:executeCmdAsync(l:rubocop_command)
+  else
+    call s:executeCmd(l:rubocop_command)
+  endif
 endfunction
 
 function! s:RuboCopCmd()
@@ -62,11 +70,21 @@ function! BackgroundCmdFinish(channel)
   unlet g:backgroundCommandOutput
 endfunction
 
-function! s:executeCmd(cmd)
+function! s:executeCmdAsync(cmd)
   echom "Running Rubocop"
 
   let g:backgroundCommandOutput = tempname()
   call job_start(a:cmd, {'close_cb': 'BackgroundCmdFinish', 'out_io': 'file', 'out_name': g:backgroundCommandOutput})
+endfunction
+
+function! s:executeCmd(cmd)
+  echom a:cmd
+  let oldautoread=&autoread
+  set autoread
+  silent !clear
+  execute "!" . a:cmd
+  redraw
+  let &autoread=oldautoread
 endfunction
 
 command! -nargs=* RuboCop call RuboCop(<q-args>)
