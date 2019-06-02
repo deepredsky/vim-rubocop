@@ -5,6 +5,10 @@ function! RuboCop(args)
     echo "Cannot run rubocop on non-ruby file"
   endif
 endfunction
+
+function! RuboCopFix()
+  if &filetype == "ruby"
+    call s:RunRuboCop(@%, 0, "--auto-correct --safe")
   else
     echo "Cannot run rubocop on non-ruby file"
   endif
@@ -90,3 +94,4 @@ endfunction
 command! -nargs=* RuboCop call RuboCop(<q-args>)
 command! -nargs=* Rubocop call RuboCop(<q-args>)
 command! -nargs=* RuboCopAll call RuboCopAll(<q-args>)
+command! -nargs=0 RuboCopFix call RuboCopFix()
