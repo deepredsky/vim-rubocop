@@ -1,4 +1,4 @@
-*vim-rubocop.txt*   Run rubocop async within vim!
+*rubocop.txt*   Run rubocop async within vim!
 
 Author:  Rajesh Sharma
 Repo:    https://github.com/deepredsky/vim-rubocop
