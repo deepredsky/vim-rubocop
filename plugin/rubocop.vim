@@ -1,3 +1,5 @@
+let s:error = 0
+
 function! RuboCop(args)
   if &filetype == "ruby"
     call s:RunRuboCop(@%, 1, a:args)
@@ -27,6 +29,10 @@ function! s:RunRuboCop(path, async, args)
 
   let l:rubocop_command = s:RuboCopCmd(). " " . l:rubocop_args
 
+  if s:error
+    return
+  endif
+
   if a:async
     call s:executeCmdAsync(l:rubocop_command)
   else
@@ -42,6 +48,13 @@ function! s:RuboCopCmd()
       let l:rubocop_command = g:rubocop_cmd . " --format emacs"
     endif
   else
+    if !executable('rubocop')
+      let s:error = 1
+      echom s:error
+      echoerr "Rubocop: rubocop binary not found. Pleast install it first"
+      return
+    endif
+
     let l:rubocop_command = 'rubocop --format emacs'
     let l:root = getcwd()
     let l:gemfile_path = root . "/Gemfile"
