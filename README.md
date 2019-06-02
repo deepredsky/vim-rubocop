@@ -8,6 +8,7 @@ VIM plugin to run [RuboCop](https://github.com/bbatsov/rubocop) and displays the
 :RuboCop " Runs rubocop on the current buffer
 :RuboCopAll " Runs rubocop on the whole project
 :RuboCopAll --display-cop-names" Run rubocop with custom options
+:RuboCopFix " Fix rubocop issues for current file. This will not be async.
 ```
 
 By default it will look at Gemfile and use `bundle exec rubocop --format emacs`
